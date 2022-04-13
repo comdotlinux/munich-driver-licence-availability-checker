@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    - cron: "*/15 7-17 * * 1-5"
 
 jobs:
   build:
@@ -20,3 +22,19 @@ jobs:
         cache-dependency-path: package-lock.json
     - run: npm ci
     - run: ./node_modules/.bin/cypress run
+
+    - name: Upload Artifact When appointment is available
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: appointment-available.mp4
+        path: cypress/videos/termin_check_spec.js.mp4
+        retention-days: 2
+
+    - name: Upload Artifact When appointment is not available
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: appointment-unavailable.mp4
+        path: cypress/videos/termin_check_spec.js.mp4
+        retention-days: 1
