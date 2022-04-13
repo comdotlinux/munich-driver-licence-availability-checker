@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: "*/15 7-17 * * 1-5"
+    - cron: "*/5 7-17 * * 1-5"
 
 jobs:
   build:
@@ -30,6 +30,43 @@ jobs:
         name: appointment-available.mp4
         path: cypress/videos/termin_check_spec.js.mp4
         retention-days: 2
+
+    - name: Send mail On Appointment Available
+      if: success()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        # Required mail server address:
+        server_address: smtp.gmail.com
+        # Required mail server port:
+        server_port: 465
+        # Optional (recommended): mail server username:
+        username: ${{secrets.MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        password: ${{secrets.MAIL_PASSWORD}}
+        # Required mail subject:
+        subject: Appoint is available
+        # Required recipients' addresses:
+        to: ${{ secrets.EMAIL_TO }}
+        # Required sender full name (address can be skipped):
+        from: Munich Driver Licence Page Checker
+        # Optional whether this connection use TLS (default is true if server_port is 465)
+        secure: true
+        # Optional plain body:
+        body: Appoint Should be available
+        # Optional carbon copy recipients:
+        cc: ${{secrets.MAIL_USERNAME}}
+        # Optional recipient of the email response:
+        reply_to: luke@example.com
+        # Optional Message ID this message is replying to:
+        in_reply_to: <random-luke@example.com>
+        # Optional unsigned/invalid certificates allowance:
+        ignore_cert: true
+        # Optional converting Markdown to HTML (set content_type to text/html too):
+        convert_markdown: true
+        # Optional attachments:
+        attachments: cypress/videos/termin_check_spec.js.mp4
+        # Optional priority: 'high', 'normal' (default) or 'low'
+        priority: high
 
     - name: Upload Artifact When appointment is not available
       if: success()
