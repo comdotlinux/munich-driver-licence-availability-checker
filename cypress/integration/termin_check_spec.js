@@ -1,6 +1,3 @@
-// const { expect } = require("chai")
-// import chai, { expect } from "chai";
-
 describe('Check Divers License Availability', () => {
 	it('Only For Next Month!', () => {
 		cy.visit('https://terminvereinbarung.muenchen.de/fs/termin/index.php?loc=FS')
@@ -10,7 +7,9 @@ describe('Check Divers License Availability', () => {
 		cy.get('div.nat_calendar_nav').get('a[href*="NEXT"]').click()
 		console.dir(cy.get('table.nat_calendar > tbody').get('td.nat_calendar').find('span'))
 		cy.get('table.nat_calendar > tbody').get('td.nat_calendar > span:nth-child(1)').each(($el, index, $list) => {
-			cy.wrap($el).should('not.be.visible').should('contain.text', 'Keine freien Termine am')
+			cy.wrap($el).should('not.be.visible').and('contain.text', 'Keine freien Termine am')
+			cy.wait(10)
 		})
+		cy.wait(100)
 	})
   })
