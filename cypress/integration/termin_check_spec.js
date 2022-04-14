@@ -10,9 +10,7 @@ describe('Check Divers License Availability', () => {
 		cy.get('div.nat_calendar_nav').get('a[href*="NEXT"]').click()
 		console.dir(cy.get('table.nat_calendar > tbody').get('td.nat_calendar').find('span'))
 		cy.get('table.nat_calendar > tbody').get('td.nat_calendar > span:nth-child(1)').each(($el, index, $list) => {
-			cy.wrap($el).should('contain.text', 'Keine freien Termine am')
+			cy.wrap($el).should('not.be.visible').should('contain.text', 'Keine freien Termine am')
 		})
-// #a6a84abc3c8666ca80a3655eef15bade20225 > table > tbody > tr:nth-child(3) > td:nth-child(5) > span:nth-child(1)
-
 	})
   })
